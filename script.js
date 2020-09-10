@@ -72,8 +72,7 @@ getTodaysDate();
 
 // creates the visuals for the scheduler body
 toDay.forEach(function (thisHour) {
- 
-    // creates timeblocks row t
+  // creates timeblocks row text
   var hourRow = $("<form>").attr({
     class: "row",
   });
@@ -92,6 +91,20 @@ toDay.forEach(function (thisHour) {
   hourPlan.append(planData);
   planData.attr(thisHour);
 
+  //compares time blocks to present time and changes their color based on the results
+  if (thisHour.time < moment().format("HH")) {
+    planData.attr({
+      class: "past",
+    });
+  } else if (thisHour.time === moment().format("HH")) {
+    planData.attr({
+      class: "present",
+    });
+  } else if (thisHour.time > moment().format("HH")) {
+    planData.attr({
+      class: "future",
+    });
+  }
   // creates save button
   var saveButton = $("<i class='far fa-calendar-check fa-large'></i>");
   var savePlan = $("<button>").attr({
@@ -100,3 +113,5 @@ toDay.forEach(function (thisHour) {
   savePlan.append(saveButton);
   hourRow.append(hourBlock, hourPlan, savePlan);
 });
+
+init();
