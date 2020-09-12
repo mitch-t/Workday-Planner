@@ -58,7 +58,7 @@ var toDay = [
 
 // gets data for today's date from momment js
 function getTodaysDate() {
-  var currentDate = moment().format("dddd, MMMM Do");
+  var currentDate = moment().format('LLLL');
   $("#currentDay").text(currentDate);
 }
 
@@ -67,12 +67,25 @@ function saveReminders() {
   localStorage.setItem("toDay", JSON.stringify(toDay));
 }
 
+
+// sets any existing localStorage data to the view if it exists
+function init() {
+    var savedDay = JSON.parse(localStorage.getItem("toDay"));
+
+    if (savedDay) {
+        toDay = savedDay;
+    }
+
+    saveReminders();
+ console.log(toDay)
+}
 // loads Todays date
 getTodaysDate();
 
 // creates the visuals for the scheduler body
 toDay.forEach(function (thisHour) {
-  // creates timeblocks row text
+ 
+    // creates timeblocks row text
   var hourRow = $("<form>").attr({
     class: "row",
   });
@@ -80,12 +93,12 @@ toDay.forEach(function (thisHour) {
 
   // creates time block -far left
   var hourBlock = $("<div>").text(`${thisHour.hour}${thisHour.ampm}`).attr({
-    class: "col-md-1 hour",
+    class: "col-md-2 hour",
   });
 
   // creates user data text area
   var hourPlan = $("<div>").attr({
-    class: "col-md-10 description p-0",
+    class: "col-md-9 description p-0",
   });
   var planData = $("<textarea>");
   hourPlan.append(planData);
@@ -94,17 +107,17 @@ toDay.forEach(function (thisHour) {
   //compares time blocks to present time and changes their color based on the results
   if (thisHour.time < moment().format("HH")) {
     planData.attr({
-      class: "past",
+       class: "past",
     });
-  } else if (thisHour.time === moment().format("HH")) {
+  }else if (thisHour.time === moment().format("HH")) {
     planData.attr({
-      class: "present",
-    });
-  } else if (thisHour.time > moment().format("HH")) {
-    planData.attr({
+       class: "present",
+     });
+    } else if (thisHour.time > moment().format("HH")) {
+      planData.attr({
       class: "future",
-    });
-  }
+      });
+    }
   // creates save button
   var saveButton = $("<i class='far fa-calendar-check fa-large'></i>");
   var savePlan = $("<button>").attr({
